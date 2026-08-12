@@ -4,56 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan Farid & Hanisa</title>
+    <!-- Tambahkan Font Elegan -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4; /* Warna latar belakang luar */
+            background-color: #fdfaf3; /* Warna krem halus untuk latar belakang */
             text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: #4a4a4a;
+            overflow-x: hidden; /* Mencegah scroll horizontal */
+        }
+        h1, .elegant-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
         }
         .container {
-            max-width: 500px; /* Lebar maksimal tampilan agar pas di HP */
-            margin: 0 auto;
+            max-width: 500px;
+            margin: 40px auto;
             background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(181, 150, 111, 0.2); /* Bayangan hangat */
+            overflow: hidden; /* Penting untuk animasi */
+            border-radius: 12px;
         }
+        
+        /* Gaya untuk wadah gambar dan animasi */
+        .scene-container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            opacity: 0; /* Awalnya tidak terlihat */
+            transform: translateY(40px) scale(0.9); /* Awalnya turun dan kecil */
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out; /* Animasi mulus */
+        }
+        .scene-container.is-visible {
+            opacity: 1; /* Akhirnya terlihat */
+            transform: translateY(0) scale(1); /* Akhirnya ukuran normal */
+        }
+        
         img {
             width: 100%;
             display: block;
             margin: 0;
             padding: 0;
+            border-bottom: 2px solid #fdfaf3; /* Garis pemisah halus */
         }
-        .audio-player {
+        
+        /* Area instruksi untuk musik */
+        .music-instruction {
             padding: 20px;
-            background: #fff;
-        }
-        audio {
-            width: 100%;
+            font-size: 14px;
+            color: #b5966f; /* Warna emas-tembaga */
+            font-weight: 500;
+            background-color: rgba(181, 150, 111, 0.05);
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Pemutar Musik -->
-        <div class="audio-player">
-            <p style="font-family: sans-serif; font-size: 14px; color: #555;">Putar Musik:</p>
-            <audio controls loop>
-                <source src="musik.mp3" type="audio/mpeg">
-                Browser Anda tidak mendukung pemutar audio.
-            </audio>
-        </div>
+        <!-- Elemen Audio (disembunyikan) -->
+        <audio id="bgMusic" loop>
+            <source src="musik.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung audio.
+        </audio>
 
-        <!-- Urutan Gambar Undangan -->
-        <img src="1. Cover.png" alt="Cover Undangan">
-        <img src="2. Prolog.png" alt="Prolog">
-        <img src="3. Kisah singkat.png" alt="Kisah Singkat">
-        <img src="4. Ayat dan do'a.png" alt="Ayat dan Doa">
-        <img src="5. Akad dan resepsi.png" alt="Akad dan Resepsi">
-        <img src="6. Terimakasih.png" alt="Terima Kasih">
-        <img src="7. Penutup.png" alt="Penutup">
-        <img src="8. Daftar pustaka.png" alt="Daftar Pustaka">
+        <!-- Wadah untuk memuat semua gambar undangan -->
+        <div id="imageLoader">
+            <div class="music-instruction elegant-text">Ketuk di mana saja untuk memutar musik</div>
+            
+            <!-- Tambahkan semua gambar dengan kelas animasi -->
+            <div class="scene-container"> <img src="1. Cover.png" alt="Cover Undangan"> </div>
+            <div class="scene-container"> <img src="2. Prolog.png" alt="Prolog"> </div>
+            <div class="scene-container"> <img src="3. Kisah singkat.png" alt="Kisah Singkat"> </div>
+            <div class="scene-container"> <img src="4. Ayat dan do'a.png" alt="Ayat dan Doa"> </div>
+            <div class="scene-container"> <img src="5. Akad dan resepsi.png" alt="Akad dan Resepsi"> </div>
+            <div class="scene-container"> <img src="6. Terimakasih.png" alt="Terima Kasih"> </div>
+            <div class="scene-container"> <img src="7. Penutup.png" alt="Penutup"> </div>
+            <div class="scene-container"> <img src="8. Daftar pustaka.png" alt="Daftar Pustaka"> </div>
+        </div>
     </div>
+
+    <script>
+        // --- Skrip untuk Autoplay Musik pada Interaksi ---
+        const audio = document.getElementById('bgMusic');
+        let musicStarted = false;
+
+        function startMusic() {
+            if (!musicStarted) {
+                audio.play();
+                musicStarted = true;
+                // Sembunyikan instruksi setelah musik dimulai
+                document.querySelector('.music-instruction').style.display = 'none';
+            }
+        }
+
+        // Jalankan musik pada klik pertama
+        document.body.addEventListener('click', startMusic, { once: true });
+        // Sebagai alternatif, pada scroll pertama
+        document.body.addEventListener('scroll', startMusic, { once: true });
+
+        // --- Skrip untuk Animasi Scroll Pop-Up Dramatis ---
+        const options = {
+            threshold: 0.1, // Berapa persen elemen yang harus terlihat sebelum memicu
+            rootMargin: '0px 0px -50px 0px' // Menambahkan margin bawah agar elemen terlihat lebih "pop"
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Hanya animasikan sekali
+                }
+            });
+        }, options);
+
+        // Targetkan semua wadah gambar
+        const targets = document.querySelectorAll('.scene-container');
+        targets.forEach(target => {
+            observer.observe(target);
+        });
+    </script>
 
 </body>
 </html>
